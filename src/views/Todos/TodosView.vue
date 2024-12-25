@@ -1,7 +1,7 @@
 <script lang="ts">
 import { defineComponent, ref, onMounted } from 'vue'
 import { useRoute, RouterLink } from 'vue-router'
-import axios from 'axios' // Axios kütüphanesini içe aktar
+import axios from 'axios'
 import TablerCheckup from '@/components/icons/tabler-checkup.vue'
 import TablerNotebook from '@/components/icons/tabler-notebook.vue'
 import TablerPhoto from '@/components/icons/tabler-photo.vue'
@@ -19,30 +19,28 @@ export default defineComponent({
 
   setup() {
     const route = useRoute()
-    const userId = route.params.userId // Kullanıcı ID'sini al
-    const todos = ref([]) // Todo verilerini saklayacak reaktif değişken
-    const user = ref({ name: '', email: '' }) // Kullanıcı bilgilerini saklayacak reaktif değişken
+    const userId = route.params.userId
+    const todos = ref([])
+    const user = ref({ name: '', email: '' })
 
-    // API'den todo verilerini ve kullanıcı bilgilerini çekme fonksiyonu
     const fetchData = async () => {
       try {
         const [todosResponse, userResponse] = await Promise.all([
           axios.get(`https://jsonplaceholder.typicode.com/todos?userId=${userId}`),
-          axios.get(`https://jsonplaceholder.typicode.com/users/${userId}`), // Kullanıcı bilgilerini çek
+          axios.get(`https://jsonplaceholder.typicode.com/users/${userId}`),
         ])
-        todos.value = todosResponse.data // Gelen todo verisini ata
-        user.value = userResponse.data // Gelen kullanıcı verisini ata
+        todos.value = todosResponse.data
+        user.value = userResponse.data
       } catch (error) {
-        console.error('Veri çekme hatasi:', error)
+        console.error('Veri cekme hatasi:', error)
       }
     }
 
-    // Bileşen yüklendiğinde verileri çek
     onMounted(() => {
       fetchData()
     })
 
-    return { user, todos, userId } // Kullanıcı bilgilerini ve todos'u döndür
+    return { user, todos, userId }
   },
 })
 </script>

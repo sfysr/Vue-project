@@ -17,41 +17,36 @@ export default defineComponent({
   },
   setup() {
     const route = useRoute()
-    const userId = route.params.userId // Kullanıcı ID'sini al
-    const albums = ref([]) // Albüm verilerini saklayacak reaktif değişken
-    const user = ref({ name: '', email: '' }) // Kullanıcı bilgilerini saklayacak reaktif değişken
+    const userId = route.params.userId
+    const albums = ref([])
+    const user = ref({ name: '', email: '' })
 
-    // API'den albüm verilerini ve kullanıcı bilgilerini çekme fonksiyonu
     const fetchData = async () => {
       try {
-        // Önce kullanıcı bilgilerini al
         const userResponse = await axios.get(`https://jsonplaceholder.typicode.com/users/${userId}`)
         user.value = userResponse.data
 
-        // Ardından kullanıcının albümlerini al
         const albumsResponse = await axios.get(
           `https://jsonplaceholder.typicode.com/albums?userId=${userId}`,
         )
         albums.value = await Promise.all(
           albumsResponse.data.map(async (album) => {
-            // Her albüm için fotoğrafları al
             const photosResponse = await axios.get(
               `https://jsonplaceholder.typicode.com/photos?albumId=${album.id}`,
             )
-            return { ...album, photos: photosResponse.data } // Albüm bilgilerini ve fotoğrafları birleştir
+            return { ...album, photos: photosResponse.data }
           }),
         )
       } catch (error) {
-        console.error('Veri çekme hatası:', error)
+        console.error('Veri cekme hatasi:', error)
       }
     }
 
-    // Bileşen yüklendiğinde verileri çek
     onMounted(() => {
       fetchData()
     })
 
-    return { user, albums, userId } // Kullanıcı bilgilerini ve albümleri döndür
+    return { user, albums, userId }
   },
 })
 </script>

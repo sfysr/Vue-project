@@ -22,27 +22,25 @@ export default defineComponent({
 
   setup() {
     const route = useRoute()
-    const userId = route.params.userId // Kullanıcı ID'sini al
-    const posts = ref([]) // Gönderi verilerini saklayacak reaktif değişken
-    const user = ref({ name: '', email: '' }) // Kullanıcı bilgilerini saklayacak reaktif değişken
-    const isPopupVisible = ref(false) // Pop-up görünürlüğü için reaktif değişken
-    const selectedPostId = ref(null) // Seçilen postun ID'si
+    const userId = route.params.userId
+    const posts = ref([])
+    const user = ref({ name: '', email: '' })
+    const isPopupVisible = ref(false)
+    const selectedPostId = ref(null)
 
-    // API'den gönderi verilerini ve kullanıcı bilgilerini çekme fonksiyonu
     const fetchData = async () => {
       try {
         const [postsResponse, userResponse] = await Promise.all([
           axios.get(`https://jsonplaceholder.typicode.com/posts?userId=${userId}`),
-          axios.get(`https://jsonplaceholder.typicode.com/users/${userId}`), // Kullanıcı bilgilerini çek
+          axios.get(`https://jsonplaceholder.typicode.com/users/${userId}`),
         ])
-        posts.value = postsResponse.data // Gelen gönderi verisini ata
+        posts.value = postsResponse.data
         user.value = userResponse.data
       } catch (error) {
-        console.error('Veri çekme hatasi:', error)
+        console.error('Veri cekme hatasi:', error)
       }
     }
 
-    // Bileşen yüklendiğinde verileri çek
     onMounted(() => {
       fetchData()
     })
@@ -57,7 +55,7 @@ export default defineComponent({
       selectedPostId.value = null
     }
 
-    return { user, posts, userId, openPopup, closePopup, isPopupVisible, selectedPostId } // Kullanıcı bilgilerini ve gönderileri döndür
+    return { user, posts, userId, openPopup, closePopup, isPopupVisible, selectedPostId }
   },
 })
 </script>

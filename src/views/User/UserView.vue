@@ -25,13 +25,13 @@ export default defineComponent({
     onMounted(async () => {
       try {
         const response = await axios.get('https://jsonplaceholder.typicode.com/users')
-        users.value = response.data // API'den gelen kullanıcı verilerini users değişkenine ata
+        users.value = response.data
       } catch (error) {
-        console.error('Kullanici verilerini çekerken hata:', error)
+        console.error('Kullanici verilerini cekerken hata:', error)
       }
     })
     const goToTodos = (userId: number) => {
-      router.push({ name: 'TodoView', params: { userId } }) // Yönlendirme işlemi
+      router.push({ name: 'TodoView', params: { userId } })
     }
 
     return { users, goToTodos }
